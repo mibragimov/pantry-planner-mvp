@@ -52,6 +52,10 @@ def parse_csv(v: str):
     return [x.strip().lower() for x in v.split(',') if x.strip()]
 
 
+# Ensure DB schema exists in production (e.g., gunicorn on Render)
+init_db()
+
+
 @app.route('/')
 def index():
     db = get_db()
