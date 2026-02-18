@@ -4,7 +4,8 @@ import sqlite3
 from flask import Flask, g, redirect, render_template, request, url_for, flash, jsonify
 
 BASE_DIR = os.path.dirname(__file__)
-DB_PATH = os.path.join(BASE_DIR, 'app.db')
+# Render/free hosts can have read-only code directories; use writable /tmp by default in production.
+DB_PATH = os.getenv('DATABASE_PATH', os.path.join('/tmp', 'pantry_planner.db'))
 
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET', 'dev-secret')
@@ -25,6 +26,8 @@ def close_db(_e=None):
 
 
 def init_db():
+    db_dir = os.path.dirname(DB_PATH) or '.'
+    os.makedirs(db_dir, exist_ok=True)
     db = sqlite3.connect(DB_PATH)
     db.executescript('''
     CREATE TABLE IF NOT EXISTS pantry_items (
