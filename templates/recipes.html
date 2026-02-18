@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block body %}
+<section class="grid two">
+<div class="card">
+  <h2>Add Recipe</h2>
+  <form method="post" action="/recipes" class="stack">
+    <input name="title" placeholder="recipe title" required>
+    <textarea name="ingredients" placeholder="comma-separated ingredients" required></textarea>
+    <textarea name="instructions" placeholder="steps" required></textarea>
+    <button type="submit">Save recipe</button>
+  </form>
+</div>
+<div class="card">
+  <h2>Recipe Match Score</h2>
+  <p>Shows how much of each recipe can be cooked with current pantry.</p>
+</div>
+</section>
+
+{% for x in recipes %}
+<section class="card">
+  <h3>{{x.recipe['title']}} — {{x.score}}% ready</h3>
+  <p><strong>Have:</strong> {{ x.have|join(', ') if x.have else '-' }}</p>
+  <p><strong>Missing:</strong> {{ x.missing|join(', ') if x.missing else 'none' }}</p>
+  <details><summary>Instructions</summary><pre>{{x.recipe['instructions']}}</pre></details>
+</section>
+{% else %}
+<p>No recipes yet.</p>
+{% endfor %}
+{% endblock %}
