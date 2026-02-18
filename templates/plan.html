@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block body %}
+<section class="card">
+  <h2>Top 3 Suggested Meals</h2>
+  {% for r in selected %}
+    <article class="recipe-item">
+      <h3>{{r.title}} ({{ (r.ratio*100)|round|int }}% ready)</h3>
+      <p><strong>Missing:</strong> {{ r.missing|join(', ') if r.missing else 'none' }}</p>
+      <details><summary>How to cook</summary><pre>{{r.instructions}}</pre></details>
+    </article>
+  {% else %}
+    <p>Add recipes first to generate a plan.</p>
+  {% endfor %}
+</section>
+
+<section class="card">
+  <h2>Auto Shopping List</h2>
+  <ul>
+  {% for item, count in shopping %}
+    <li>{{item}} (needed in {{count}} selected recipe{{'s' if count > 1 else ''}})</li>
+  {% else %}
+    <li>No missing items.</li>
+  {% endfor %}
+  </ul>
+</section>
+{% endblock %}
